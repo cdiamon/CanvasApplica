@@ -22,6 +22,7 @@ class CarViewKt : View {
     private var currentCarAngle: Float = 0f
 
     private var testRectF = RectF(1f, 1f, 1f, 1f)
+    private lateinit var paintTest: Paint
 
 
     private lateinit var animPath: Path
@@ -53,6 +54,10 @@ class CarViewKt : View {
         paint.color = Color.BLUE
         paint.strokeWidth = 0.3f
         paint.style = Paint.Style.STROKE
+        paintTest = Paint()
+        paintTest.color = Color.GREEN
+        paintTest.strokeWidth = 1f
+        paintTest.style = Paint.Style.STROKE
 
         bm = BitmapFactory.decodeResource(resources, R.drawable.car_top_view_red)
         bm_offsetX = bm.width / 2
@@ -87,7 +92,7 @@ class CarViewKt : View {
         canvas.drawPath(animPath, paint)
 
 
-        canvas.drawRect(testRectF, paint)
+        canvas.drawRect(testRectF, paintTest)
 
         if (distance < pathLength) {
             pathMeasure.getPosTan(distance, position, tangent)
