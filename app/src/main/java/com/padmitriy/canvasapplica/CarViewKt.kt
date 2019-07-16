@@ -59,7 +59,7 @@ class CarViewKt : View {
         paintTest.strokeWidth = 1f
         paintTest.style = Paint.Style.STROKE
 
-        bm = BitmapFactory.decodeResource(resources, R.drawable.car_top_view_red)
+        bm = BitmapFactory.decodeResource(resources, R.drawable.car_top_view_red_invert)
         bm_offsetX = bm.width / 2
         bm_offsetY = bm.height / 2
 
@@ -98,7 +98,7 @@ class CarViewKt : View {
             pathMeasure.getPosTan(distance, position, tangent)
 
             matrix.reset()
-            val degrees = (Math.atan2(tangent[1].toDouble(), tangent[0].toDouble()) * 180.0 / Math.PI).toFloat() + 180
+            val degrees = (Math.atan2(tangent[1].toDouble(), tangent[0].toDouble()) * 180.0 / Math.PI).toFloat()
             matrix.postRotate(degrees, bm_offsetX.toFloat(), bm_offsetY.toFloat())
             matrix.postTranslate(position[0] - bm_offsetX, position[1] - bm_offsetY)
 
@@ -182,11 +182,15 @@ class CarViewKt : View {
 //                    max(position[1], event.y),
 //                    currentCarAngle, 10f
 //                )
-//                animPath.cubicTo()
-//                animPath.rCubicTo()
+//                animPath.quadTo(    // mediocre
+//                    position[0] + 100,
+//                    position[1] + 100,
+//                    event.x,
+//                    event.y
+//                )
                 animPath.quadTo(
-                    position[0] + 100,
-                    position[1] + 100,
+                    position[0],
+                    event.y,
                     event.x,
                     event.y
                 )
