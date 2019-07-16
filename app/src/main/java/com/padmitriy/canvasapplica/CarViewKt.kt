@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.tan
 
 
 class CarViewKt : View {
@@ -188,9 +189,18 @@ class CarViewKt : View {
 //                    event.x,
 //                    event.y
 //                )
+
+                val x0 = position[0]
+                val y0 = position[1]
+                val x2 = event.x
+                val y2 = event.y
+                val x1 = x0 - 50
+
+                val y1 = y0 + ((x1 - x0) * tan(Math.toRadians(currentCarAngle.toDouble()).toFloat()))
+
                 animPath.quadTo(
-                    position[0],
-                    event.y,
+                    x1,
+                    y1,
                     event.x,
                     event.y
                 )
