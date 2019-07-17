@@ -17,8 +17,8 @@ class CarView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     lateinit var bm: Bitmap
     lateinit var pathMeasure: PathMeasure
     private lateinit var myMatrix: Matrix
-    var bm_offsetX: Int = 0
-    var bm_offsetY: Int = 0
+    private var bmOffsetX: Int = 0
+    private var bmOffsetY: Int = 0
 
     var pathLength: Float = 0.toFloat()
     var step: Float = 0.toFloat()   //distance each step
@@ -34,12 +34,12 @@ class CarView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private fun initMyView() {
         paint = Paint()
         paint.color = (Color.BLUE)
-        paint.setStrokeWidth(1f)
-        paint.setStyle(Paint.Style.STROKE)
+        paint.strokeWidth = 1f
+        paint.style = Paint.Style.STROKE
 
         bm = BitmapFactory.decodeResource(resources, R.drawable.car_top_view_red)
-        bm_offsetX = bm.getWidth() / 2
-        bm_offsetY = bm.getHeight() / 2
+        bmOffsetX = bm.width / 2
+        bmOffsetY = bm.height / 2
 
         animPath = Path()
         animPath.moveTo(200f, 200f)
@@ -52,7 +52,7 @@ class CarView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         animPath.close()
 
         pathMeasure = PathMeasure(animPath, false)
-        pathLength = pathMeasure.getLength()
+        pathLength = pathMeasure.length
 
         Toast.makeText(context, "pathLength: $pathLength", Toast.LENGTH_LONG).show()
 
@@ -74,8 +74,8 @@ class CarView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
             matrix.reset()
             val degrees = (atan2(tan[1], tan[0]) * 180.0 / Math.PI).toFloat()
-            matrix.postRotate(degrees, bm_offsetX.toFloat(), bm_offsetY.toFloat())
-            matrix.postTranslate(pos[0] - bm_offsetX, pos[1] - bm_offsetY)
+            matrix.postRotate(degrees, bmOffsetX.toFloat(), bmOffsetY.toFloat())
+            matrix.postTranslate(pos[0] - bmOffsetX, pos[1] - bmOffsetY)
 
             canvas.drawBitmap(bm, matrix, null)
 

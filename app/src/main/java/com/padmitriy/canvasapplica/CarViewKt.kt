@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import kotlin.math.atan2
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.tan
@@ -12,11 +13,10 @@ import kotlin.math.tan
 
 class CarViewKt : View {
 
-
     private lateinit var paint: Paint
     private lateinit var bm: Bitmap
-    private var bm_offsetX: Int = 0
-    private var bm_offsetY: Int = 0
+    private var bmOffsetX: Int = 0
+    private var bmOffsetY: Int = 0
 
     private var currentCarX: Float = 0f
     private var currentCarY: Float = 0f
@@ -24,7 +24,6 @@ class CarViewKt : View {
 
     private var testRectF = RectF(1f, 1f, 1f, 1f)
     private lateinit var paintTest: Paint
-
 
     private lateinit var animPath: Path
     private lateinit var pathMeasure: PathMeasure
@@ -36,7 +35,7 @@ class CarViewKt : View {
     private lateinit var position: FloatArray
     private lateinit var tangent: FloatArray
 
-    internal lateinit var matrix: Matrix
+    private lateinit var myMatrix: Matrix
 
     constructor(context: Context) : super(context) {
         initMyView()
@@ -50,7 +49,7 @@ class CarViewKt : View {
         initMyView()
     }
 
-    fun initMyView() {
+    private fun initMyView() {
         paint = Paint()
         paint.color = Color.BLUE
         paint.strokeWidth = 0.3f
@@ -61,8 +60,8 @@ class CarViewKt : View {
         paintTest.style = Paint.Style.STROKE
 
         bm = BitmapFactory.decodeResource(resources, R.drawable.car_top_view_red_invert)
-        bm_offsetX = bm.width / 2
-        bm_offsetY = bm.height / 2
+        bmOffsetX = bm.width / 2
+        bmOffsetY = bm.height / 2
 
         animPath = Path()
         animPath.moveTo(-50f, -50f)
@@ -84,7 +83,7 @@ class CarViewKt : View {
         position = FloatArray(2)
         tangent = FloatArray(2)
 
-        matrix = Matrix()
+        myMatrix = Matrix()
         invalidate()
     }
 
@@ -92,68 +91,37 @@ class CarViewKt : View {
 
         canvas.drawPath(animPath, paint)
 
-
         canvas.drawRect(testRectF, paintTest)
 
         if (distance < pathLength) {
             pathMeasure.getPosTan(distance, position, tangent)
 
-            matrix.reset()
-            val degrees = (Math.atan2(tangent[1].toDouble(), tangent[0].toDouble()) * 180.0 / Math.PI).toFloat()
-            matrix.postRotate(degrees, bm_offsetX.toFloat(), bm_offsetY.toFloat())
-            matrix.postTranslate(position[0] - bm_offsetX, position[1] - bm_offsetY)
+            myMatrix.reset()
+            val degrees = (atan2(tangent[1].toDouble(), tangent[0].toDouble()) * 180.0 / Math.PI).toFloat()
+            myMatrix.postRotate(degrees, bmOffsetX.toFloat(), bmOffsetY.toFloat())
+            myMatrix.postTranslate(position[0] - bmOffsetX, position[1] - bmOffsetY)
 
             currentCarX = position[0]
             currentCarY = position[1]
             currentCarAngle = degrees
 
-            canvas.drawBitmap(bm, matrix, null)
+            canvas.drawBitmap(bm, myMatrix, null)
 
             distance += step
             invalidate()
         } else {
             distance += step
-            canvas.drawBitmap(bm, matrix, null)
+            canvas.drawBitmap(bm, myMatrix, null)
             invalidate()
 //            distance = 0f
         }
-
     }
-
-    var startMoveMillis = 0L
-    var countDebug = 0
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
 //            MotionEvent.ACTION_DOWN -> {
-//                countDebug = 0
-//                startMoveMillis = System.currentTimeMillis()
-//                animPath = Path()
-//                animPath.moveTo(position[0], position[1])
-//                animPath.lineTo(event.x, event.y)
-//                distance = 0f
-//                pathMeasure = PathMeasure(animPath, false)
-//                pathLength = pathMeasure.length
-//                invalidate()
 //            }
-
 //            MotionEvent.ACTION_MOVE -> {
-//                val newMoveMillis = System.currentTimeMillis()
-//                if ((newMoveMillis - startMoveMillis) > 15) {
-//                    startMoveMillis = newMoveMillis
-//                    println(countDebug++)
-//
-//                    animPath = Path()
-//                    animPath.moveTo(position[0], position[1])
-//                    animPath.lineTo(event.x, event.y)
-//                    distance += step
-//                    pathMeasure = PathMeasure(animPath, false)
-//                    pathLength = pathMeasure.length
-////                    invalidate()
-////                    invalidate()
-//                }
-//
-//
 //            }
             MotionEvent.ACTION_UP -> {
 
@@ -171,10 +139,11 @@ class CarViewKt : View {
 //                animPath.lineTo(event.x, event.y)
 //                animPath.quadTo(100f, 100f, event.x, event.y)
                 println(
-                    "${min(position[0], event.x)} ${max(position[1], event.y)} ${max(position[0], event.x)} ${min(
-                        position[1],
-                        event.y
-                    )} ${currentCarAngle}"
+                    "${min(position[0], event.x)} " +
+                            "${max(position[1], event.y)} " +
+                            "${max(position[0], event.x)} " +
+                            "${min(position[1], event.y)} " +
+                            "$currentCarAngle"
                 )
 //                animPath.addArc( // shit
 //                    min(position[0], event.x),
