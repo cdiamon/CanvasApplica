@@ -111,6 +111,10 @@ class CarPathView : View {
 
             canvas.drawBitmap(bm, myMatrix, null)
 
+            //todo увеличивать step до половины pathLength, потом уменьшать
+            pathLength
+            step
+
             distance += step
             invalidate()
         } else {
