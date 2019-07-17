@@ -1,16 +1,34 @@
 package com.padmitriy.canvasapplica
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var carView: CarPathView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        carView = findViewById(R.id.carView)
     }
+
+    /**
+     * включать или выключать отрисовку отладочной информации по нажатию на громкость вверх\вниз
+     */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            carView.setDebugMode(false)
+        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            carView.setDebugMode(true)
+        }
+        return true
+    }
+
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
