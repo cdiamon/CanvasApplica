@@ -1,4 +1,4 @@
-package com.padmitriy.canvasapplica
+package com.cdiamon.carpath
 
 import android.content.Context
 import android.graphics.*
@@ -192,26 +192,6 @@ class CarPathView : View {
     private fun calculateMiddlePoint(x0: Float, y0: Float, x1: Float): Float {
         //todo разобраться с углами близкими к 90 (infinity), отрицательные углы
         return y0 + ((x1 - x0) * tan(Math.toRadians(currentCarAngle.toDouble()).toFloat()))
-    }
-
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-    }
-
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
     }
 
     fun setDebugMode(drawDebugInfo: Boolean) {
