@@ -30,8 +30,8 @@ class CarPathView : View {
     private lateinit var pathMeasure: PathMeasure
     private var pathLength: Float = 0.toFloat()
 
-    private var step: Float = 0.toFloat()   //distance each step
-    private var distance: Float = 0.toFloat()  //distance moved
+    private var step: Float = 0f   //distance each step
+    private var distance: Float = 0f  //distance moved
 
     private lateinit var position: FloatArray
     private lateinit var tangent: FloatArray
